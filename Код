@@ -1,0 +1,735 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
+int main()
+{
+	int p = 0;
+	int W;
+	int H;
+	int a[20][20];
+	cin >> W >> H; cin.ignore();
+	for (int i = 0; i < H; i++)
+	{
+		string LINE;
+		getline(cin, LINE);
+		p = 0;
+		for (int k = 0; k < LINE.length(); k++)
+		{
+			string LIN;
+			while (LINE[k] != ' ' && k < LINE.length())
+			{
+				LIN += LINE[k];
+				k++;
+
+			}
+			a[i][p] = atoi(LIN.c_str());
+			p++;
+		}
+	}
+	int EX;
+	cin >> EX; cin.ignore();
+
+	while (1)
+	{
+	Vvod:
+		int g = 0;
+		p = 0;
+		int X;
+		int Y;
+		int XO;
+		int YO;
+		int XP;
+		int YP;
+		std::string POS;
+		std::string buff;
+		cin >> X >> Y >> POS;
+		cin.ignore();
+
+		int R; // the number of rocks currently in the grid.
+		cin >> R; cin.ignore();
+		for (int i = 0; i < R; i++)
+		{
+			int XR;
+			int YR;
+			string POSR;
+			cin >> XR >> YR >> POSR; cin.ignore();
+		}
+	Sort1:
+		p = 0;
+	Sort:
+		p++;
+		switch (abs(a[Y][X]))
+		{
+		case 0:
+			goto end;
+		case 1:
+		{
+			if (POS[0] == 'L' || POS[0] == 'R' || POS[0] == 'T')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+
+			}
+			break;
+		}
+		case 2:
+		{
+			if (POS[0] == 'R')
+			{
+				X--;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				};
+			}
+			if (POS[0] == 'L')
+			{
+				X++;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'T' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 3;
+					goto Vvod;
+				}
+				a[Y][X] = 3;
+				goto Sort1;
+
+			}break;
+		}
+
+		case 3:
+		{
+			if (POS[0] == 'T')
+			{
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if ((POS[0] == 'R' || POS[0] == 'L') && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 2;
+					goto Vvod;
+				}
+				a[Y][X] = 2;
+				goto Sort1;
+			}
+			break;
+		}
+		case 4:
+		{
+			if (POS[0] == 'T')
+			{
+				if (abs(a[Y][X + 1]) != 0 && abs(a[Y][X - 1]) != 0)
+				{
+					g++;
+					XO = X;
+					YO = Y;
+					buff = "LEFT";
+					X--;
+					POS[0] = 'R';
+					;						goto Sort1;
+				}
+				X--;
+				POS[0] = 'R';
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'R')
+			{
+				Y++;
+				POS[0] = 'T';
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'L' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 5;
+					goto Vvod;
+				}
+				a[Y][X] = 5;
+				goto Sort1;
+			}
+			break;
+		}
+		case 5:
+		{
+			if (POS[0] == 'T')
+			{
+				X++;
+				POS[0] = 'L';
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'L')
+			{
+				Y++;
+				POS[0] = 'T';
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+				break;
+			}
+			if (POS[0] == 'R' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 4;
+					goto Vvod;
+				}
+				a[Y][X] = 4;
+				goto Sort1;
+
+			}
+		}
+		case 6:
+		{
+			if (POS[0] == 'T')
+			{
+				X++;
+				POS[0] = 'L';
+				if (p < 2)
+					goto Sort;
+				else {
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'L')
+			{
+				X++;
+				if (p < 2)
+					goto Sort;
+				else {
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'R')
+			{
+				if (a[Y][X - 1] == 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "RIGHT" << endl;
+						a[Y][X] = 7;
+						goto Vvod;
+					}
+					a[Y][X] = 7;
+					goto Sort1;
+
+				}
+				X--;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+
+			}
+			break;
+		}
+		case 7:
+		{
+			if (POS[0] == 'T')
+			{
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else {
+					cout << "WAIT" << endl;
+					goto Vvod;
+				}
+				goto Sort1;
+			}
+			if (POS[0] == 'R')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'L')
+			{
+				if (a[Y][X + 1] != 0 && a[Y][X] > 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "LEFT" << endl;
+						a[Y][X] = 6;
+						goto Vvod;
+					}
+					a[Y][X] = 6;
+					goto Sort1;
+
+				}
+				if (a[Y + 1][X] != 0 && a[Y][X] > 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "RIGHT" << endl;
+						a[Y][X] = 8;
+						goto Vvod;
+					}
+					a[Y][X] = 8;
+					goto Sort1;
+
+				}
+			}
+			break;
+		}
+		case 8:
+		{
+			if (POS[0] == 'L')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'R')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else
+				{
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'T')
+			{
+				if (a[Y][X + 1] != 0 && a[Y][X] > 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "LEFT" << endl;
+						a[Y][X] = 7;
+						goto Vvod;
+					}
+					a[Y][X] = 7;
+					goto Sort1;
+
+				}
+				if (a[Y + 1][X] != 0 && a[Y][X] > 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "RIGHT" << endl;
+						a[Y][X] = 12;
+						goto Vvod;
+					}
+					a[Y][X] = 12;
+					goto Sort1;
+				}
+			}
+			break;
+		}
+		case 9:
+		{
+			if (POS[0] == 'T')
+			{
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else {
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'L')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else {
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'R')
+			{
+				if (a[Y][X - 1] != 0 && a[Y][X] > 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "RIGHT" << endl;
+						a[Y][X] = 8;
+						goto Vvod;
+					}
+					a[Y][X] = 8;
+					goto Sort1;
+				}
+				if (a[Y + 1][X] != 0 && a[Y][X] > 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "LEFT" << endl;
+						a[Y][X] = 6;
+						goto Vvod;
+					}
+					a[Y][X] = 6;
+					goto Sort1;
+				}
+			}
+			break;
+		}
+		case 10:
+		{
+			if (POS[0] == 'T')
+			{
+				if (a[Y][X] > 0 && a[Y][X - 1] == 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "RIGHT" << endl;
+						a[Y][X] = 11;
+						goto Vvod;
+					}
+					if (YP == Y && XP == X)
+						goto end;
+					YP = Y;
+					XP = X;
+					a[Y][X] = 11;
+					goto Sort1;
+				}
+				else
+				{
+					X--;
+					POS[0] = 'R';
+					if (p < 2)
+						goto Sort;
+					else if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+
+			}
+			if (POS[0] == 'L' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 13;
+					goto Vvod;
+				}
+				if (YP == Y && XP == X)
+					goto end;
+				YP = Y;
+				XP = X;
+				a[Y][X] = 13;
+				goto Sort1;
+			}
+			break;
+		}
+		case 11:
+		{
+			if (POS[0] == 'T')
+			{
+				if (a[Y][X + 1] == 0 && a[Y][X] > 0 && p == 0)
+				{
+					if (g == 0)
+					{
+						cout << X << " " << Y << " " << "LEFT" << endl;
+						a[Y][X] = 10;
+						goto Vvod;
+					}
+					if (YP == Y && XP == X)
+						goto end;
+					YP = Y;
+					XP = X;
+					a[Y][X] = 10;
+					goto Sort1;
+				}
+				else
+				{
+					X++;
+					if (p < 2)
+					{
+						POS[0] = 'L';
+						goto Sort;
+					}
+					else
+						if (g == 0)
+						{
+							cout << "WAIT" << endl;
+							goto Vvod;
+						}
+					goto Sort1;
+
+				}
+			}
+			if (POS[0] == 'R' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "RIGHT" << endl;
+					a[Y][X] = 12;
+					goto Vvod;
+				}
+				if (YP == Y && XP == X)
+					goto end;
+				YP = Y;
+				XP = X;
+				a[Y][X] = 12;
+				goto Sort1;
+			}
+			break;
+		}
+		case 12:
+		{
+			if (POS[0] == 'R')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else {
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'T' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 11;
+					goto Vvod;
+				}
+				if (YP == Y && XP == X)
+					goto end;
+				YP = Y;
+				XP = X;
+				a[Y][X] = 11;
+				goto Sort1;
+			}
+			else if (POS[0] == 'L' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "RIGHT" << endl;
+					a[Y][X] = 13;
+					goto Vvod;
+				}
+				if (YP == Y && XP == X)
+					goto end;
+				YP = Y;
+				XP = X;
+				a[Y][X] = 13;
+				goto Sort1;
+
+			}
+			break;
+		}
+
+		case 13:
+		{
+			if (POS[0] == 'L')
+			{
+				POS[0] = 'T';
+				Y++;
+				if (p < 2)
+					goto Sort;
+				else {
+					if (g == 0)
+					{
+						cout << "WAIT" << endl;
+						goto Vvod;
+					}
+					goto Sort1;
+				}
+			}
+			if (POS[0] == 'T' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "RIGHT" << endl;
+					a[Y][X] = 10;
+					goto Vvod;
+				}
+				if (YP == Y && XP == X)
+					goto end;
+				YP = Y;
+				XP = X;
+				a[Y][X] = 10;
+				goto Sort1;
+			}
+			else if (POS[0] == 'R' && a[Y][X] > 0)
+			{
+				if (g == 0)
+				{
+					cout << X << " " << Y << " " << "LEFT" << endl;
+					a[Y][X] = 12;
+					goto Vvod;
+				}
+				if (YP == Y && XP == X)
+					goto end;
+				YP = Y;
+				XP = X;
+				a[Y][X] = 12;
+				goto Sort1;
+			}
+			break;
+		}
+	end:
+		default:
+		{
+			g = 0;
+			if (a[Y][X] != a[H - 1][EX])
+			{
+				if (a[YO][XO] = 4)
+					a[YO][XO] = 5;
+				cout << XO << " " << YO << " " << buff << endl;
+			}
+			else if (a[Y][X] == a[H][EX])
+				cout << "WAIT" << endl;
+			goto Vvod;
+		}
+
+		}
+	}
+
+
+}
